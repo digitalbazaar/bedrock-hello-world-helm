@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bedrock-hello-world
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bedrock-hello-world
+  template:
+    metadata:
+      labels:
+        app: bedrock-hello-world
+    spec:
+      volumes:
+        - name: bedrock-config-volume
+          configMap:
+            name: bedrock-hello-world-config
+      containers:
+      - name: bedrock-hello-world
+        image: {{ index .Values "bedrock-hello-world" "image" }}
+        ports:
+        - containerPort: 10080
+          name: http
+        - containerPort: 10443
+          name: https
+        readinessProbe:
+          initialDelaySeconds: 1
+          periodSeconds: 5
+          httpGet:
+            scheme: HTTPS
+            port: 10443
+            path: /health/ready
+        livenessProbe:
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          httpGet:
+            scheme: HTTPS
+            port: 10443
+            path: /health/live
+        volumeMounts:
+        - name: bedrock-config-volume
+          mountPath: /etc/bedrock-config
+          readOnly: true

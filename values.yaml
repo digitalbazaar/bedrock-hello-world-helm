@@ -1,0 +1,16 @@
+bedrock-hello-world:
+  image: quay.io/digitalbazaar/bedrock-hello-world:1.1.1-rc1
+  bedrock:
+    app:
+      hello-world:
+        helloFrom: Kubernetes
+      server:
+        domain: '0.0.0.0'
+        host: the-domain.app
+        httpPort: 10080
+        port: 10443
+    core:
+      loggers:
+        console:
+          bedrock:
+            formatter: logstash

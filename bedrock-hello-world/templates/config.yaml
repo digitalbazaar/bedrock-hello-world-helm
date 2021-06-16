@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bedrock-hello-world-config
+data:
+  app.yaml: |-
+    {{- $appConfig := index .Values "bedrock-hello-world" "bedrock" "app" -}}
+    {{- toYaml $appConfig | nindent 4 }}
+  core.yaml: |-
+    {{- $coreConfig := index .Values "bedrock-hello-world" "bedrock" "core" -}}
+    {{- toYaml $coreConfig | nindent 4 }}

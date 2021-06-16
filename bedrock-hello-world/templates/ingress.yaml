@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bedrock-hello-world-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    # removes the hello-world path below before sending to Bedrock app
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /hello-world
+        pathType: Prefix
+        backend:
+          service:
+            name: bedrock-hello-world
+            port:
+              number: 443
+
